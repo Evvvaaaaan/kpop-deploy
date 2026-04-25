@@ -66,24 +66,28 @@
         /* Word break for Korean */
         .break-keep { word-break: keep-all; }
         
-        /* Custom Animations */
+        /* 1. Scroll Reveal Animations */
         .fade-in {
-            animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            /* 부드럽고 절제된 등장 애니메이션 (1.2초) */
+            animation: fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(40px);
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
+            from { opacity: 0; transform: translateY(40px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .delay-100 { animation-delay: 100ms; }
-        .delay-200 { animation-delay: 200ms; }
-        .delay-300 { animation-delay: 300ms; }
-        
+        /* 4. Magnetic Button Base Transition */
+        .magnetic-btn {
+            /* JS의 transform 변경과 부드럽게 이어지도록 짧고 부드러운 전환 효과 부여 */
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+            will-change: transform;
+        }
+
         /* Navbar Scrolled State Transition */
-        #navbar { transition: all 0.3s ease; }
+        #navbar { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         #navbar.scrolled { 
             background-color: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(8px);
@@ -140,10 +144,11 @@
     <main>
         <!-- Hero Section -->
         <section id="home" class="relative pt-32 pb-20 lg:pt-0 lg:pb-0 overflow-hidden bg-white flex flex-col items-center justify-center min-h-screen text-center border-b border-black">
-            <!-- Strict black grid background pattern for modern feel -->
-            <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px); background-size: 40px 40px;"></div>
+            <!-- 3. Hero Section Parallax (Background) -->
+            <div class="hero-bg-pattern absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px); background-size: 40px 40px; transform-origin: top;"></div>
 
-            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 fade-in">
+            <!-- 3. Hero Section Parallax (Content) -->
+            <div class="hero-content max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 fade-in">
                 <span class="inline-block py-2 px-6 border border-black text-black text-xs font-bold tracking-[0.3em] uppercase mb-10 rounded-[4px] hover:bg-black hover:text-white transition-colors duration-300" data-i18n="hero.badge">Limited Jecheol-core</span>
                 
                 <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter text-black mb-8 leading-[1.1] break-keep">
@@ -155,8 +160,8 @@
                     일 년 중 허락된 짧은 시간. 붉은 달콤함을 품은 루비 키위로 일상 속 1인분의 완벽한 낭만을 경험하세요.
                 </p>
                 
-                <!-- Smooth scrolling is natively supported via CSS html { scroll-behavior: smooth } -->
-                <a href="#features" class="inline-flex justify-center items-center px-12 py-5 bg-black text-white text-lg font-bold hover:bg-brand transition-colors duration-300 rounded-[4px] shadow-[4px_4px_0px_0px_rgba(225,29,72,1)] hover:shadow-[0px_0px_0px_0px_rgba(225,29,72,1)] hover:translate-x-[4px] hover:translate-y-[4px]">
+                <!-- 4. Magnetic CTA Button -->
+                <a href="#features" class="magnetic-btn inline-flex justify-center items-center px-12 py-5 bg-black text-white text-lg font-bold hover:bg-brand rounded-[4px] shadow-[4px_4px_0px_0px_rgba(225,29,72,1)]">
                     <span data-i18n="hero.cta">[제품 보러 가기]</span>
                 </a>
             </div>
@@ -176,10 +181,9 @@
                     
                     <!-- Feature 1 -->
                     <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-24 fade-in">
-                        <div class="w-full lg:w-1/2">
-                            <!-- AI Prompt for Midjourney/DALL-E -->
-                            <!-- Prompt: "A cinematic, ultra-realistic close-up macro photography of a sliced kiwi with striking, vibrant ruby-red flesh in the center, contrasting beautifully against a pure stark black background. Dramatic lighting, sharp focus, premium food photography, 8k resolution --ar 4:3" -->
-                            <img src="./assets/feature_visual.png" alt="시선을 사로잡는 붉은빛 과육" class="w-full h-auto object-cover rounded-[4px] border border-gray-800 grayscale-0 hover:grayscale transition-all duration-700">
+                        <div class="w-full lg:w-1/2 overflow-hidden rounded-[4px] border border-gray-800">
+                            <!-- 2. Color Reveal Hover: grayscale (흑백 필터) -> grayscale-0 (루비 레드 컬러 돋보임) -->
+                            <img src="./assets/feature_visual.png" alt="시선을 사로잡는 붉은빛 과육" class="w-full h-auto object-cover grayscale hover:grayscale-0 hover:scale-105 transition-all duration-[1200ms] ease-out">
                         </div>
                         <div class="w-full lg:w-1/2">
                             <span class="text-brand font-black tracking-[0.2em] text-sm uppercase mb-4 block border-l-4 border-brand pl-4" data-i18n="features.item1.tag">01 / Visual</span>
@@ -192,10 +196,9 @@
 
                     <!-- Feature 2 -->
                     <div class="flex flex-col lg:flex-row-reverse items-center gap-12 lg:gap-24 fade-in">
-                        <div class="w-full lg:w-1/2">
-                            <!-- AI Prompt for Midjourney/DALL-E -->
-                            <!-- Prompt: "A minimalist, high-end photography of golden kiwi juice or syrup dripping elegantly, perfectly illuminated against a deep black background. Symbolizing extreme sweetness and high Brix level. High contrast, sharp details, luxury food styling, 8k --ar 4:3" -->
-                            <img src="./assets/feature_taste.png" alt="차원이 다른 프리미엄 당도" class="w-full h-auto object-cover rounded-[4px] border border-gray-800 grayscale-0 hover:grayscale transition-all duration-700">
+                        <div class="w-full lg:w-1/2 overflow-hidden rounded-[4px] border border-gray-800">
+                            <!-- 2. Color Reveal Hover -->
+                            <img src="./assets/feature_taste.png" alt="차원이 다른 프리미엄 당도" class="w-full h-auto object-cover grayscale hover:grayscale-0 hover:scale-105 transition-all duration-[1200ms] ease-out">
                         </div>
                         <div class="w-full lg:w-1/2">
                             <span class="text-brand font-black tracking-[0.2em] text-sm uppercase mb-4 block border-l-4 border-brand pl-4" data-i18n="features.item2.tag">02 / Taste</span>
@@ -208,10 +211,9 @@
 
                     <!-- Feature 3 -->
                     <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-24 fade-in">
-                        <div class="w-full lg:w-1/2">
-                            <!-- AI Prompt for Midjourney/DALL-E -->
-                            <!-- Prompt: "A sophisticated composition of a whole ruby kiwi and fresh water splashes or glowing abstract elements on a pure black surface, representing dense nutrition and vitality. Elegant, modern aesthetic, stark contrast, studio lighting, 8k --ar 4:3" -->
-                            <img src="./assets/feature_health.png" alt="밀도 높은 영양" class="w-full h-auto object-cover rounded-[4px] border border-gray-800 grayscale-0 hover:grayscale transition-all duration-700">
+                        <div class="w-full lg:w-1/2 overflow-hidden rounded-[4px] border border-gray-800">
+                            <!-- 2. Color Reveal Hover -->
+                            <img src="./assets/feature_health.png" alt="밀도 높은 영양" class="w-full h-auto object-cover grayscale hover:grayscale-0 hover:scale-105 transition-all duration-[1200ms] ease-out">
                         </div>
                         <div class="w-full lg:w-1/2">
                             <span class="text-brand font-black tracking-[0.2em] text-sm uppercase mb-4 block border-l-4 border-brand pl-4" data-i18n="features.item3.tag">03 / Health</span>
@@ -231,7 +233,7 @@
             <div class="max-w-4xl mx-auto px-4 relative z-10 fade-in">
                 <h2 class="text-4xl md:text-6xl font-black mb-8 tracking-tight break-keep" data-i18n="cta.title">가장 완벽한 타이밍은 바로 지금</h2>
                 <p class="text-xl mb-12 text-black font-medium break-keep" data-i18n="cta.desc">올해 허락된 한정된 수량. 당신의 감각을 채워줄 붉은 보석을 선점하세요.</p>
-                <a href="#" class="inline-flex justify-center items-center px-12 py-6 bg-brand text-white text-xl font-bold hover:bg-black transition-colors duration-300 rounded-[4px] border border-brand hover:border-black">
+                <a href="#" class="magnetic-btn inline-flex justify-center items-center px-12 py-6 bg-brand text-white text-xl font-bold hover:bg-black rounded-[4px] border border-brand hover:border-black">
                     <span data-i18n="cta.button">[사전 예약하기]</span>
                 </a>
             </div>
@@ -241,20 +243,20 @@
     <!-- Footer -->
     <footer class="bg-black border-t border-gray-900 py-16 text-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-8">
-            <div class="text-center md:text-left">
+            <div class="text-center md:text-left fade-in">
                 <a href="#" class="text-3xl font-black tracking-tighter uppercase">
                     Ruby<span class="text-brand">Kiwi.</span>
                 </a>
                 <p class="mt-4 text-sm text-gray-400 font-light tracking-widest uppercase" data-i18n="footer.copyright">© 2026 Ruby Kiwi. The Premium Jecheol-core.</p>
             </div>
-            <div class="flex space-x-8">
+            <div class="flex space-x-8 fade-in">
                 <a href="#" class="text-white hover:text-brand transition-colors duration-300"><span class="sr-only">Instagram</span><i class="fa-brands fa-instagram text-2xl"></i></a>
                 <a href="#" class="text-white hover:text-brand transition-colors duration-300"><span class="sr-only">Facebook</span><i class="fa-brands fa-facebook text-2xl"></i></a>
             </div>
         </div>
     </footer>
 
-    <!-- Interactive Logic (Language Toggle, Mobile Menu, Animation) -->
+    <!-- Interactive Logic -->
     <script>
         // Multi-language JSON Data
         const translations = {
@@ -329,7 +331,6 @@
                 }
             });
 
-            // Close mobile menu on link click
             document.querySelectorAll('#mobileMenu a').forEach(link => {
                 link.addEventListener('click', () => {
                     isMenuOpen = false;
@@ -338,7 +339,7 @@
                 });
             });
 
-            // Sticky Navbar styling on scroll
+            // Sticky Navbar styling
             const navbar = document.getElementById('navbar');
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 20) {
@@ -348,7 +349,7 @@
                 }
             });
 
-            // Language Toggle Functionality
+            // Language Toggle
             let currentLang = 'ko';
             const langToggles = [document.getElementById('langToggle'), document.getElementById('langToggleMobile')];
             const i18nElements = document.querySelectorAll('[data-i18n]');
@@ -360,12 +361,9 @@
                         el.innerHTML = translations[lang][key];
                     }
                 });
-
-                // Update Toggle Buttons Text
                 langToggles.forEach(btn => {
                     btn.querySelector('span').textContent = translations[lang]['lang.next'];
                 });
-                
                 document.documentElement.lang = lang;
             };
 
@@ -376,7 +374,7 @@
                 });
             });
 
-            // Fade-in animation on scroll
+            // 1. Scroll Reveal (Fade-in animation)
             const fadeElements = document.querySelectorAll('.fade-in');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -387,15 +385,54 @@
                 });
             }, {
                 threshold: 0.15,
-                rootMargin: '0px 0px -50px 0px'
+                rootMargin: '0px 0px -30px 0px'
             });
 
             fadeElements.forEach(el => {
                 el.style.animationPlayState = 'paused';
                 observer.observe(el);
             });
+
+            // 3. Hero Section Parallax
+            const heroBg = document.querySelector('.hero-bg-pattern');
+            const heroContent = document.querySelector('.hero-content');
             
-            // Smooth Scroll logic is natively handled by CSS 'scroll-behavior: smooth'
+            window.addEventListener('scroll', () => {
+                const scrollY = window.scrollY;
+                // Only animate if hero is in viewport
+                if (scrollY < window.innerHeight) {
+                    if (heroBg) {
+                        heroBg.style.transform = `translateY(${scrollY * 0.4}px)`;
+                    }
+                    if (heroContent) {
+                        heroContent.style.transform = `translateY(${scrollY * 0.15}px)`;
+                    }
+                }
+            });
+
+            // 4. Magnetic CTA Button Logic
+            const magneticButtons = document.querySelectorAll('.magnetic-btn');
+            
+            magneticButtons.forEach(btn => {
+                btn.addEventListener('mousemove', (e) => {
+                    const rect = btn.getBoundingClientRect();
+                    const h = rect.width / 2;
+                    const v = rect.height / 2;
+                    
+                    // Calculate distance from center of button
+                    const x = e.clientX - rect.left - h;
+                    const y = e.clientY - rect.top - v;
+                    
+                    // Move button slightly towards cursor (magnetic effect)
+                    // Scale slightly to make it pop
+                    btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px) scale(1.05)`;
+                });
+                
+                btn.addEventListener('mouseleave', () => {
+                    // Reset to original position
+                    btn.style.transform = `translate(0px, 0px) scale(1)`;
+                });
+            });
         });
     </script>
 </body>
