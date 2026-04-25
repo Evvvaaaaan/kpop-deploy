@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruby Kiwi - The Premium Jecheol-core</title>
+    
+    <meta name="description" content="오직 지금, 당신의 기분을 완벽하게 채울 단 하나의 '제철코어'. 붉은 달콤함을 품은 프리미엄 루비 키위를 경험하세요.">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts (Inter & Pretendard) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
+    
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            DEFAULT: '#E11D48', // Point Color (Ruby Red)
+                            dark: '#BE123C',
+                        },
+                        // Strict Black & White palette
+                        white: '#FFFFFF',
+                        black: '#000000',
+                    },
+                    fontFamily: {
+                        sans: ['Pretendard', 'Inter', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        // Enforce strictly 4px across the board
+                        'none': '0',
+                        'sm': '4px',
+                        DEFAULT: '4px',
+                        'md': '4px',
+                        'lg': '4px',
+                        'xl': '4px',
+                        '2xl': '4px',
+                        '3xl': '4px',
+                        'full': '4px', // Override full rounding
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Pretendard', 'Inter', sans-serif;
+            color: #000000;
+            background-color: #FFFFFF;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* Smooth scrolling */
+        html { scroll-behavior: smooth; }
+        
+        /* Word break for Korean */
+        .break-keep { word-break: keep-all; }
+        
+        /* 1. Scroll Reveal Animations */
+        .fade-in {
+            /* 부드럽고 절제된 등장 애니메이션 (1.2초) */
+            animation: fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 4. Magnetic Button Base Transition */
+        .magnetic-btn {
+            /* JS의 transform 변경과 부드럽게 이어지도록 짧고 부드러운 전환 효과 부여 */
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+            will-change: transform;
+        }
+
+        /* Navbar Scrolled State Transition */
+        #navbar { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        #navbar.scrolled { 
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-brand selection:text-white">
+
+    <!-- Header & Navigation -->
+    <header id="navbar" class="fixed w-full top-0 z-50 bg-white border-b border-black">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#" class="text-2xl font-black tracking-tighter text-black uppercase">
+                        Ruby<span class="text-brand">Kiwi.</span>
+                    </a>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <nav class="hidden md:flex space-x-10 items-center">
+                    <a href="#home" class="text-black hover:text-brand transition-colors text-sm font-bold uppercase tracking-widest" data-i18n="nav.home">Home</a>
+                    <a href="#features" class="text-black hover:text-brand transition-colors text-sm font-bold uppercase tracking-widest" data-i18n="nav.product">Product</a>
+                    <a href="#contact" class="text-black hover:text-brand transition-colors text-sm font-bold uppercase tracking-widest" data-i18n="nav.contact">Contact</a>
+                    
+                    <!-- Language Toggle Desktop -->
+                    <button id="langToggle" class="ml-4 flex items-center justify-center px-4 py-2 bg-black text-white hover:bg-brand transition-colors focus:outline-none rounded-[4px]">
+                        <span class="text-xs font-bold tracking-wider">EN</span>
+                    </button>
+                </nav>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center gap-4">
+                    <button id="langToggleMobile" class="flex items-center justify-center px-3 py-1.5 bg-black text-white hover:bg-brand transition-colors focus:outline-none rounded-[4px]">
+                        <span class="text-xs font-bold tracking-wider">EN</span>
+                    </button>
+                    <button id="mobileMenuBtn" class="text-black hover:text-brand focus:outline-none transition-colors">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-b border-black absolute w-full shadow-2xl">
+            <div class="px-4 py-6 space-y-2">
+                <a href="#home" class="block px-4 py-3 bg-white text-black font-bold uppercase tracking-widest border border-transparent hover:border-black transition-colors rounded-[4px]" data-i18n="nav.home">Home</a>
+                <a href="#features" class="block px-4 py-3 bg-white text-black font-bold uppercase tracking-widest border border-transparent hover:border-black transition-colors rounded-[4px]" data-i18n="nav.product">Product</a>
+                <a href="#contact" class="block px-4 py-3 bg-white text-black font-bold uppercase tracking-widest border border-transparent hover:border-black transition-colors rounded-[4px]" data-i18n="nav.contact">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="relative pt-32 pb-20 lg:pt-0 lg:pb-0 overflow-hidden bg-white flex flex-col items-center justify-center min-h-screen text-center border-b border-black">
+            <!-- 3. Hero Section Parallax (Background) -->
+            <div class="hero-bg-pattern absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px); background-size: 40px 40px; transform-origin: top;"></div>
+
+            <!-- 3. Hero Section Parallax (Content) -->
+            <div class="hero-content max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 fade-in">
+                <span class="inline-block py-2 px-6 border border-black text-black text-xs font-bold tracking-[0.3em] uppercase mb-10 rounded-[4px] hover:bg-black hover:text-white transition-colors duration-300" data-i18n="hero.badge">Limited Jecheol-core</span>
+                
+                <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter text-black mb-8 leading-[1.1] break-keep">
+                    <span data-i18n="hero.title1">오직 지금, 당신의 기분을 완벽하게 채울</span><br class="hidden md:block">
+                    <span data-i18n="hero.title2">단 하나의</span> <span class="text-brand" data-i18n="hero.title3">'제철코어'</span>
+                </h1>
+                
+                <p class="text-lg md:text-xl text-black mb-14 max-w-3xl mx-auto leading-relaxed font-medium break-keep" data-i18n="hero.desc">
+                    일 년 중 허락된 짧은 시간. 붉은 달콤함을 품은 루비 키위로 일상 속 1인분의 완벽한 낭만을 경험하세요.
+                </p>
+                
+                <!-- 4. Magnetic CTA Button -->
+                <a href="#features" class="magnetic-btn inline-flex justify-center items-center px-12 py-5 bg-black text-white text-lg font-bold hover:bg-brand rounded-[4px] shadow-[4px_4px_0px_0px_rgba(225,29,72,1)]">
+                    <span data-i18n="hero.cta">[제품 보러 가기]</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Features Section (Zig-zag Layout) -->
+        <section id="features" class="py-32 bg-black text-white border-b border-black">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- Section Title -->
+                <div class="text-center mb-32 fade-in">
+                    <h2 class="text-3xl md:text-5xl font-black tracking-tight uppercase" data-i18n="features.title">당신의 감각을 깨우는 세 가지 특징</h2>
+                    <div class="w-24 h-1 bg-brand mx-auto mt-8"></div>
+                </div>
+
+                <div class="space-y-32 md:space-y-48">
+                    
+                    <!-- Feature 1 -->
+                    <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-24 fade-in">
+                        <div class="w-full lg:w-1/2 overflow-hidden rounded-[4px] border border-gray-800">
+                            <!-- 2. Color Reveal Hover: grayscale (흑백 필터) -> grayscale-0 (루비 레드 컬러 돋보임) -->
+                            <img src="./assets/feature_visual.png" alt="시선을 사로잡는 붉은빛 과육" class="w-full h-auto object-cover grayscale hover:grayscale-0 hover:scale-105 transition-all duration-[1200ms] ease-out">
+                        </div>
+                        <div class="w-full lg:w-1/2">
+                            <span class="text-brand font-black tracking-[0.2em] text-sm uppercase mb-4 block border-l-4 border-brand pl-4" data-i18n="features.item1.tag">01 / Visual</span>
+                            <h3 class="text-3xl lg:text-4xl font-extrabold mb-6 break-keep" data-i18n="features.item1.title">시선을 사로잡는 붉은빛 과육</h3>
+                            <p class="text-lg text-gray-300 font-light leading-relaxed break-keep" data-i18n="features.item1.desc">
+                                단조로운 일상에 강렬한 포인트를 더하세요. 한 스푼 떠올리는 순간 드러나는 영롱한 루비빛은 눈으로 먼저 즐기는 프리미엄 디저트의 완성입니다.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="flex flex-col lg:flex-row-reverse items-center gap-12 lg:gap-24 fade-in">
+                        <div class="w-full lg:w-1/2 overflow-hidden rounded-[4px] border border-gray-800">
+                            <!-- 2. Color Reveal Hover -->
+                            <img src="./assets/feature_taste.png" alt="차원이 다른 프리미엄 당도" class="w-full h-auto object-cover grayscale hover:grayscale-0 hover:scale-105 transition-all duration-[1200ms] ease-out">
+                        </div>
+                        <div class="w-full lg:w-1/2">
+                            <span class="text-brand font-black tracking-[0.2em] text-sm uppercase mb-4 block border-l-4 border-brand pl-4" data-i18n="features.item2.tag">02 / Taste</span>
+                            <h3 class="text-3xl lg:text-4xl font-extrabold mb-6 break-keep" data-i18n="features.item2.title">차원이 다른 프리미엄 당도</h3>
+                            <p class="text-lg text-gray-300 font-light leading-relaxed break-keep" data-i18n="features.item2.desc">
+                                혀끝에 닿는 순간 퍼지는 극한의 달콤함. 신맛을 덜어내고 압도적인 브릭스(Brix)를 자랑하는 이 맛은 오직 지금, 완벽한 필코노미를 실현합니다.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-24 fade-in">
+                        <div class="w-full lg:w-1/2 overflow-hidden rounded-[4px] border border-gray-800">
+                            <!-- 2. Color Reveal Hover -->
+                            <img src="./assets/feature_health.png" alt="밀도 높은 영양" class="w-full h-auto object-cover grayscale hover:grayscale-0 hover:scale-105 transition-all duration-[1200ms] ease-out">
+                        </div>
+                        <div class="w-full lg:w-1/2">
+                            <span class="text-brand font-black tracking-[0.2em] text-sm uppercase mb-4 block border-l-4 border-brand pl-4" data-i18n="features.item3.tag">03 / Health</span>
+                            <h3 class="text-3xl lg:text-4xl font-extrabold mb-6 break-keep" data-i18n="features.item3.title">빈틈없이 채운 밀도 높은 영양</h3>
+                            <p class="text-lg text-gray-300 font-light leading-relaxed break-keep" data-i18n="features.item3.desc">
+                                풍부한 비타민과 항산화 성분을 하나의 과일에 응축했습니다. 나를 위한 아낌없는 투자, 내 몸이 원하는 진정한 럭셔리 케어를 시작하세요.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section id="contact" class="py-32 bg-white text-black border-b border-black text-center relative">
+            <div class="max-w-4xl mx-auto px-4 relative z-10 fade-in">
+                <h2 class="text-4xl md:text-6xl font-black mb-8 tracking-tight break-keep" data-i18n="cta.title">가장 완벽한 타이밍은 바로 지금</h2>
+                <p class="text-xl mb-12 text-black font-medium break-keep" data-i18n="cta.desc">올해 허락된 한정된 수량. 당신의 감각을 채워줄 붉은 보석을 선점하세요.</p>
+                <a href="#" class="magnetic-btn inline-flex justify-center items-center px-12 py-6 bg-brand text-white text-xl font-bold hover:bg-black rounded-[4px] border border-brand hover:border-black">
+                    <span data-i18n="cta.button">[사전 예약하기]</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black border-t border-gray-900 py-16 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="text-center md:text-left fade-in">
+                <a href="#" class="text-3xl font-black tracking-tighter uppercase">
+                    Ruby<span class="text-brand">Kiwi.</span>
+                </a>
+                <p class="mt-4 text-sm text-gray-400 font-light tracking-widest uppercase" data-i18n="footer.copyright">© 2026 Ruby Kiwi. The Premium Jecheol-core.</p>
+            </div>
+            <div class="flex space-x-8 fade-in">
+                <a href="#" class="text-white hover:text-brand transition-colors duration-300"><span class="sr-only">Instagram</span><i class="fa-brands fa-instagram text-2xl"></i></a>
+                <a href="#" class="text-white hover:text-brand transition-colors duration-300"><span class="sr-only">Facebook</span><i class="fa-brands fa-facebook text-2xl"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Logic -->
+    <script>
+        // Multi-language JSON Data
+        const translations = {
+            'ko': {
+                'nav.home': 'Home',
+                'nav.product': 'Product',
+                'nav.contact': 'Contact',
+                'hero.badge': 'Limited Jecheol-core',
+                'hero.title1': '오직 지금, 당신의 기분을 완벽하게 채울',
+                'hero.title2': '단 하나의',
+                'hero.title3': "'제철코어'",
+                'hero.desc': '일 년 중 허락된 짧은 시간. 붉은 달콤함을 품은 루비 키위로 일상 속 1인분의 완벽한 낭만을 경험하세요.',
+                'hero.cta': '[제품 보러 가기]',
+                'features.title': '당신의 감각을 깨우는 세 가지 특징',
+                'features.item1.tag': '01 / Visual',
+                'features.item1.title': '시선을 사로잡는 붉은빛 과육',
+                'features.item1.desc': '단조로운 일상에 강렬한 포인트를 더하세요. 한 스푼 떠올리는 순간 드러나는 영롱한 루비빛은 눈으로 먼저 즐기는 프리미엄 디저트의 완성입니다.',
+                'features.item2.tag': '02 / Taste',
+                'features.item2.title': '차원이 다른 프리미엄 당도',
+                'features.item2.desc': '혀끝에 닿는 순간 퍼지는 극한의 달콤함. 신맛을 덜어내고 압도적인 브릭스(Brix)를 자랑하는 이 맛은 오직 지금, 완벽한 필코노미를 실현합니다.',
+                'features.item3.tag': '03 / Health',
+                'features.item3.title': '빈틈없이 채운 밀도 높은 영양',
+                'features.item3.desc': '풍부한 비타민과 항산화 성분을 하나의 과일에 응축했습니다. 나를 위한 아낌없는 투자, 내 몸이 원하는 진정한 럭셔리 케어를 시작하세요.',
+                'cta.title': '가장 완벽한 타이밍은 바로 지금',
+                'cta.desc': '올해 허락된 한정된 수량. 당신의 감각을 채워줄 붉은 보석을 선점하세요.',
+                'cta.button': '[사전 예약하기]',
+                'footer.copyright': '© 2026 Ruby Kiwi. The Premium Jecheol-core.',
+                'lang.next': 'EN'
+            },
+            'en': {
+                'nav.home': 'Home',
+                'nav.product': 'Product',
+                'nav.contact': 'Contact',
+                'hero.badge': 'Limited Seasonal Core',
+                'hero.title1': 'Only now, perfectly satisfying your mood.',
+                'hero.title2': 'The singular',
+                'hero.title3': "'Seasonal Core'",
+                'hero.desc': 'A fleeting moment allowed once a year. Experience the perfect personal romance in everyday life with the ruby kiwi, embracing red sweetness.',
+                'hero.cta': '[Explore Product]',
+                'features.title': 'Three features that awaken your senses',
+                'features.item1.tag': '01 / Visual',
+                'features.item1.title': 'Captivating Ruby Red Flesh',
+                'features.item1.desc': 'Add a strong accent to your monotonous routine. The brilliant ruby color revealed the moment you take a spoonful completes a premium dessert enjoyed first with your eyes.',
+                'features.item2.tag': '02 / Taste',
+                'features.item2.title': 'Unparalleled Premium Sweetness',
+                'features.item2.desc': 'Extreme sweetness that spreads the moment it touches your tongue. Minimizing acidity and boasting an overwhelming Brix, this taste realizes perfect Philconomy only now.',
+                'features.item3.tag': '03 / Health',
+                'features.item3.title': 'Densely Packed Nutrition',
+                'features.item3.desc': 'Rich vitamins and antioxidants condensed into a single fruit. Start the true luxury care your body desires, a generous investment for yourself.',
+                'cta.title': 'The Perfect Timing is Right Now',
+                'cta.desc': 'Limited quantity allowed this year. Secure the red jewel that will fulfill your senses.',
+                'cta.button': '[Pre-order Now]',
+                'footer.copyright': '© 2026 Ruby Kiwi. The Premium Jecheol-core.',
+                'lang.next': 'KR'
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile Menu Toggle
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            let isMenuOpen = false;
+
+            mobileMenuBtn.addEventListener('click', () => {
+                isMenuOpen = !isMenuOpen;
+                if (isMenuOpen) {
+                    mobileMenu.classList.remove('hidden');
+                    mobileMenuBtn.innerHTML = '<i class="fa-solid fa-xmark text-2xl"></i>';
+                } else {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars text-2xl"></i>';
+                }
+            });
+
+            document.querySelectorAll('#mobileMenu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    isMenuOpen = false;
+                    mobileMenu.classList.add('hidden');
+                    mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars text-2xl"></i>';
+                });
+            });
+
+            // Sticky Navbar styling
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // Language Toggle
+            let currentLang = 'ko';
+            const langToggles = [document.getElementById('langToggle'), document.getElementById('langToggleMobile')];
+            const i18nElements = document.querySelectorAll('[data-i18n]');
+
+            const updateLanguage = (lang) => {
+                i18nElements.forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (translations[lang][key]) {
+                        el.innerHTML = translations[lang][key];
+                    }
+                });
+                langToggles.forEach(btn => {
+                    btn.querySelector('span').textContent = translations[lang]['lang.next'];
+                });
+                document.documentElement.lang = lang;
+            };
+
+            langToggles.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    currentLang = currentLang === 'ko' ? 'en' : 'ko';
+                    updateLanguage(currentLang);
+                });
+            });
+
+            // 1. Scroll Reveal (Fade-in animation)
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.15,
+                rootMargin: '0px 0px -30px 0px'
+            });
+
+            fadeElements.forEach(el => {
+                el.style.animationPlayState = 'paused';
+                observer.observe(el);
+            });
+
+            // 3. Hero Section Parallax
+            const heroBg = document.querySelector('.hero-bg-pattern');
+            const heroContent = document.querySelector('.hero-content');
+            
+            window.addEventListener('scroll', () => {
+                const scrollY = window.scrollY;
+                // Only animate if hero is in viewport
+                if (scrollY < window.innerHeight) {
+                    if (heroBg) {
+                        heroBg.style.transform = `translateY(${scrollY * 0.4}px)`;
+                    }
+                    if (heroContent) {
+                        heroContent.style.transform = `translateY(${scrollY * 0.15}px)`;
+                    }
+                }
+            });
+
+            // 4. Magnetic CTA Button Logic
+            const magneticButtons = document.querySelectorAll('.magnetic-btn');
+            
+            magneticButtons.forEach(btn => {
+                btn.addEventListener('mousemove', (e) => {
+                    const rect = btn.getBoundingClientRect();
+                    const h = rect.width / 2;
+                    const v = rect.height / 2;
+                    
+                    // Calculate distance from center of button
+                    const x = e.clientX - rect.left - h;
+                    const y = e.clientY - rect.top - v;
+                    
+                    // Move button slightly towards cursor (magnetic effect)
+                    // Scale slightly to make it pop
+                    btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px) scale(1.05)`;
+                });
+                
+                btn.addEventListener('mouseleave', () => {
+                    // Reset to original position
+                    btn.style.transform = `translate(0px, 0px) scale(1)`;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
